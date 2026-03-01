@@ -144,7 +144,7 @@
   .hero-btn .arrow { transition: transform 0.2s; font-size: 16px; }
   .hero-btn:hover .arrow { transform: translateX(5px); }
 
-  /* Cursor reveal effect */
+  /* ─── FOOTBALL CURSOR REVEAL ─── */
   .hero-name-wrap {
     position: relative;
     display: inline-block;
@@ -153,26 +153,51 @@
 
   .cursor-reveal {
     position: fixed;
-    width: 280px;
-    height: 340px;
-    border-radius: 50%;
-    background-image: url('https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/ankush_bg.jpg');
-    background-size: cover;
-    background-position: center top;
+    width: 300px;
+    height: 300px;
     pointer-events: none;
     z-index: 1000;
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.85);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    border: 3px solid rgba(240,192,64,0.4);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(240,192,64,0.1);
+    top: 0; left: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.4s ease;
     will-change: transform;
   }
 
-  .cursor-reveal.visible {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+  .cursor-reveal.visible { opacity: 1; }
+
+  .cursor-reveal svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
   }
+
+  .cursor-reveal .reveal-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    clip-path: url(#footballClip);
+    border-radius: 0;
+  }
+
+  /* Custom cursor dot */
+  .cursor-dot {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1001;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s;
+    opacity: 0;
+    box-shadow: 0 0 8px rgba(240,192,64,0.8);
+  }
+  .cursor-dot.visible { opacity: 1; }
   .track-section {
     position: relative; padding: 0 0 120px; overflow: hidden;
   }
@@ -515,7 +540,23 @@
 </section>
 
 <!-- Cursor reveal -->
-<div class="cursor-reveal" id="cursorReveal"></div>
+<div class="cursor-reveal" id="cursorReveal">
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <clipPath id="footballClip" clipPathUnits="objectBoundingBox">
+        <path id="footballPath" d="M0.5,0.02 C0.75,0.02 0.98,0.25 0.98,0.5 C0.98,0.75 0.75,0.98 0.5,0.98 C0.25,0.98 0.02,0.75 0.02,0.5 C0.02,0.25 0.25,0.02 0.5,0.02 Z"/>
+      </clipPath>
+    </defs>
+  </svg>
+  <img class="reveal-img" src="https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/ankush_bg.jpg" alt="Ankush"/>
+  <!-- Football stitching overlay -->
+  <svg class="stitch-svg" viewBox="0 0 300 300" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0.25;">
+    <circle cx="150" cy="150" r="145" fill="none" stroke="rgba(240,192,64,0.6)" stroke-width="2"/>
+    <line x1="150" y1="5" x2="150" y2="295" stroke="rgba(240,192,64,0.3)" stroke-width="1" stroke-dasharray="6,4"/>
+    <line x1="5" y1="150" x2="295" y2="150" stroke="rgba(240,192,64,0.3)" stroke-width="1" stroke-dasharray="6,4"/>
+  </svg>
+</div>
+<div class="cursor-dot" id="cursorDot"></div>
 
 <!-- TRACK -->
 <section class="track-section" id="track">
@@ -864,32 +905,107 @@ function updateCounter() {
     `${days.toLocaleString()} days, ${hours}h ${minutes}m ${seconds}s`;
 }
 
-// Cursor reveal on ANKUSH text
+// ─── FOOTBALL CURSOR REVEAL ───
 const cursorReveal = document.getElementById('cursorReveal');
+const cursorDot = document.getElementById('cursorDot');
 const heroNameWrap = document.getElementById('heroNameWrap');
+
 let mouseX = 0, mouseY = 0;
 let revealX = 0, revealY = 0;
+let prevX = 0, prevY = 0;
 let isHovering = false;
+let animFrame = null;
+let wavePhase = 0;
+
+// Smooth elastic lag — like a ball flying through air
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+// Generate a wobbly football-like path based on velocity
+function getFootballPath(vx, vy) {
+  const speed = Math.sqrt(vx * vx + vy * vy);
+  const squish = Math.min(speed * 0.0018, 0.18); // how much it stretches
+  const angle = Math.atan2(vy, vx);
+
+  // Base football shape — slightly elongated in direction of travel
+  const rx = 0.48 + squish; // stretch in travel direction
+  const ry = 0.48 - squish * 0.5; // compress perpendicular
+
+  // Generate ellipse points with wave ripple on the edge
+  const points = [];
+  const N = 32;
+  wavePhase += 0.12;
+
+  for (let i = 0; i <= N; i++) {
+    const t = (i / N) * Math.PI * 2;
+    const wave = 1 + Math.sin(t * 3 + wavePhase) * squish * 0.4;
+
+    // Rotate ellipse in direction of movement
+    const ex = rx * Math.cos(t) * wave;
+    const ey = ry * Math.sin(t) * wave;
+    const rx2 = ex * Math.cos(angle) - ey * Math.sin(angle);
+    const ry2 = ex * Math.sin(angle) + ey * Math.cos(angle);
+
+    points.push([0.5 + rx2, 0.5 + ry2]);
+  }
+
+  // Build smooth SVG path
+  let d = `M${points[0][0]},${points[0][1]}`;
+  for (let i = 1; i < points.length - 1; i++) {
+    const mx = (points[i][0] + points[i + 1][0]) / 2;
+    const my = (points[i][1] + points[i + 1][1]) / 2;
+    d += ` Q${points[i][0]},${points[i][1]} ${mx},${my}`;
+  }
+  d += ' Z';
+  return d;
+}
+
+function animateCursor() {
+  if (!isHovering) return;
+
+  // Smooth lag — elastic follow
+  revealX = lerp(revealX, mouseX, 0.1);
+  revealY = lerp(revealY, mouseY, 0.1);
+
+  // Velocity for squish effect
+  const vx = mouseX - prevX;
+  const vy = mouseY - prevY;
+  prevX = lerp(prevX, mouseX, 0.1);
+  prevY = lerp(prevY, mouseY, 0.1);
+
+  cursorReveal.style.left = revealX + 'px';
+  cursorReveal.style.top = revealY + 'px';
+
+  // Update football path
+  const path = document.getElementById('footballPath');
+  if (path) path.setAttribute('d', getFootballPath(vx, vy));
+
+  animFrame = requestAnimationFrame(animateCursor);
+}
 
 document.addEventListener('mousemove', (e) => {
   mouseX = e.clientX;
   mouseY = e.clientY;
-  if (isHovering) {
-    cursorReveal.style.left = mouseX + 'px';
-    cursorReveal.style.top = mouseY + 'px';
-  }
+  cursorDot.style.left = mouseX + 'px';
+  cursorDot.style.top = mouseY + 'px';
 });
 
 heroNameWrap.addEventListener('mouseenter', () => {
   isHovering = true;
+  revealX = mouseX;
+  revealY = mouseY;
+  prevX = mouseX;
+  prevY = mouseY;
   cursorReveal.classList.add('visible');
-  cursorReveal.style.left = mouseX + 'px';
-  cursorReveal.style.top = mouseY + 'px';
+  cursorDot.classList.add('visible');
+  cancelAnimationFrame(animFrame);
+  animateCursor();
 });
 
 heroNameWrap.addEventListener('mouseleave', () => {
   isHovering = false;
   cursorReveal.classList.remove('visible');
+  cursorDot.classList.remove('visible');
+  cancelAnimationFrame(animFrame);
 });
 
 updateCounter();
