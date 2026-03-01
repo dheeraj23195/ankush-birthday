@@ -489,7 +489,7 @@
 
 <!-- PROGRESS -->
 <div class="progress-pill">
-  <span id="progText">0 / 17 watched</span>
+  <span id="progText">0 / 16 watched</span>
   <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
 </div>
 
@@ -498,42 +498,41 @@ const data = [
   {
     group: 'family', label: 'Family', pillClass: 'gpill-family', stemColor: '#bf360c',
     people: [
-      { id:'mom',      name:'Mom',      emoji:'❤️', relation:'Your Mom',    caption:'Your first cheerleader, your forever safe place. Nobody loves you like she does.', videoSrc:'mom.mp4' },
-      { id:'dad',      name:'Dad',      emoji:'🧡', relation:'Your Dad',    caption:'The man who taught you how to stand tall. So proud of who you\'ve become.', videoSrc:null },
-      { id:'sonalika', name:'Sonalika', emoji:'💛', relation:'Your Sister', caption:'Your biggest critic and your loudest supporter — all at once.', videoSrc:'sona.mp4' },
+      { id:'mom',      name:'Mom',      emoji:'❤️', relation:'Your Mom',    caption:'"Aww" 🥹', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/mom.mp4' },
+      { id:'dad',      name:'Dad',      emoji:'🧡', relation:'Your Dad',    caption:'"Unc" 😄', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/dad.mp4' },
+      { id:'sonalika', name:'Sonalika', emoji:'💛', relation:'Your Sister', caption:'From the better sibling 💩', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/sona.mp4' },
     ]
   },
   {
     group: 'school', label: 'School Friends', pillClass: 'gpill-school', stemColor: '#1565c0',
     people: [
-      { id:'dheeraj', name:'Dheeraj', emoji:'🤝', relation:'School Friend', caption:'Add your caption here — something only you two would understand 😄', videoSrc:'dheeraj.mp4' },
-      { id:'tanush',  name:'Tanush',  emoji:'✌️', relation:'School Friend', caption:'Add your caption for Tanush here.', videoSrc:null },
+      { id:'dheeraj', name:'Dheeraj', emoji:'🤝', relation:'School Friend', caption:'Booty call but make it food 🍕', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/dheeraj.mp4' },
+      { id:'tanush',  name:'Tanush',  emoji:'✌️', relation:'School Friend', caption:'Not everyone is lucky enough to win a school football rivalry 😘', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/tanush.mp4' },
       { id:'ramit',   name:'Ramit',   emoji:'🔥', relation:'School Friend', caption:'Add your caption for Ramit here.', videoSrc:null },
     ]
   },
   {
     group: 'friends', label: 'Close Friends', pillClass: 'gpill-friends', stemColor: '#6a1b9a',
     people: [
-      { id:'rupin',   name:'Rupin',   emoji:'🌊', relation:'Close Friend', caption:'Add your caption for Rupin here.', videoSrc:null },
-      { id:'ayushee', name:'Aayushi', emoji:'🌸', relation:'Close Friend', caption:'Add your caption for Aayushi here.', videoSrc:null },
-      { id:'medha',   name:'Medha',   emoji:'💫', relation:'Close Friend', caption:'Add your caption for Medha here.', videoSrc:null },
+      { id:'rupin', name:'Rupin', emoji:'🌊', relation:'Close Friend', caption:'Life lessons from your favourite teacher 📖', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/rupin.mp4' },
+      { id:'medha', name:'Medha', emoji:'💫', relation:'Close Friend', caption:'On & Off bestfriends ✨', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/medha.mp4' },
     ]
   },
   {
     group: 'college', label: 'College', pillClass: 'gpill-college', stemColor: '#00695c',
     people: [
-      { id:'samreen', name:'Samreen', emoji:'🌙', relation:'College Friend', caption:'Add your caption for Samreen here.', videoSrc:'samreen.mp4' },
-      { id:'aarohi',  name:'Aarohi',  emoji:'⭐', relation:'College Friend', caption:'Add your caption for Aarohi here.', videoSrc:'aarohi.mp4' },
-      { id:'anushka', name:'Anushka', emoji:'🎀', relation:'College Friend', caption:'Add your caption for Anushka here.', videoSrc:'anushka.mp4' },
+      { id:'samreen', name:'Samreen', emoji:'🌙', relation:'College Friend', caption:'Add your caption for Samreen here.', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/samreen.mp4' },
+      { id:'aarohi',  name:'Aarohi',  emoji:'⭐', relation:'College Friend', caption:'Add your caption for Aarohi here.', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/aarohi.mp4' },
+      { id:'anushka', name:'Anushka', emoji:'🎀', relation:'College Friend', caption:'Add your caption for Anushka here.', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/anushka.mp4' },
     ]
   },
   {
     group: 'football', label: 'Football Team', pillClass: 'gpill-football', stemColor: '#2e7d32',
     people: [
-      { id:'utkarsh', name:'Utkarsh Bhaiya', emoji:'⚽', relation:'Football Team', caption:'The senior who shaped your game. Happy 21, legend.', videoSrc:'utkarsh_bhaiya.mp4' },
-      { id:'arjun',   name:'Arjun Bhaiya',   emoji:'🏃', relation:'Football Team', caption:'Add your caption for Arjun Bhaiya here.', videoSrc:'arjun_bhaiya.mp4' },
-      { id:'parth',   name:'Parth',           emoji:'🥅', relation:'Football Team', caption:'Add your caption for Parth here.', videoSrc:'parth.mp4' },
-      { id:'vrinda',  name:'Vrinda',          emoji:'🌟', relation:'Football Team', caption:'Add your caption for Vrinda here.', videoSrc:'vrinda.mp4' },
+      { id:'utkarsh', name:'Utkarsh Bhaiya', emoji:'⚽', relation:'Football Team', caption:'The senior who shaped your game. Happy 21, legend.', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/utkarsh_bhaiya.mp4' },
+      { id:'arjun',   name:'Arjun Bhaiya',   emoji:'🏃', relation:'Football Team', caption:'Add your caption for Arjun Bhaiya here.', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/arjun_bhaiya.mp4' },
+      { id:'parth',   name:'Parth',           emoji:'🥅', relation:'Football Team', caption:'Add your caption for Parth here.', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/parth.mp4' },
+      { id:'vrinda',  name:'Vrinda',          emoji:'🌟', relation:'Football Team', caption:'Add your caption for Vrinda here.', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/vrinda.mp4' },
     ]
   },
 ];
@@ -542,7 +541,7 @@ const messiPerson = { id:'messi', name:'???', emoji:'🐐', relation:'⭐ Specia
 
 const groupColors = { family:'#bf360c', school:'#1565c0', friends:'#6a1b9a', college:'#00695c', football:'#2e7d32', messi:'#b8860b' };
 const watched = new Set();
-const TOTAL = 17;
+const TOTAL = 16;
 
 function el(tag, cls, html) {
   const e = document.createElement(tag);
@@ -689,7 +688,7 @@ function revealMessi() {
   // play video if src set
   const vid = document.getElementById('messiVideo');
   // videoSrc for messi can be set here:
-  const messiVideoSrc = 'messi.mp4';
+  const messiVideoSrc = 'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/messi.mp4';
   if (messiVideoSrc) {
     vid.className = 'modal-video landscape';
     vid.innerHTML = `<video controls autoplay playsinline src="${messiVideoSrc}"></video>`;
