@@ -409,6 +409,7 @@
     .connector { width: 30px !important; }
   }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.browser.min.js"></script>
 </head>
 <body>
 
@@ -523,15 +524,15 @@ const data = [
     people: [
       { id:'samreen', name:'Samreen', emoji:'🌙', relation:'College Friend', caption:'Family away from home — annoys like a real brother but always has your back 🥰', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/samreen.mp4' },
       { id:'aarohi',  name:'Aarohi',  emoji:'⭐', relation:'College Friend', caption:'Twin bhai behan 👯', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/aarohi.mp4' },
-      { id:'anushka', name:'Anushka', emoji:'🎀', relation:'College Friend', caption:'Add your caption for Anushka here.', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/anushka.mp4' },
+      { id:'anushka', name:'Anushka', emoji:'🎀', relation:'College Friend', caption:'Taane maarne wali maa aur beti 😭', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/anushka.mp4' },
     ]
   },
   {
     group: 'football', label: 'Football Team', pillClass: 'gpill-football', stemColor: '#2e7d32',
     people: [
-      { id:'utkarsh', name:'Utkarsh Bhaiya', emoji:'⚽', relation:'Football Team', caption:'The senior who shaped your game. Happy 21, legend.', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/utkarsh_bhaiya.mp4' },
+      { id:'utkarsh', name:'Utkarsh Bhaiya', emoji:'⚽', relation:'Football Team', caption:'Rom-com 🎬', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/utkarsh_bhaiya.mp4' },
       { id:'arjun',   name:'Arjun Bhaiya',   emoji:'🏃', relation:'Football Team', caption:'Add your caption for Arjun Bhaiya here.', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/arjun_bhaiya.mp4' },
-      { id:'parth',   name:'Parth',           emoji:'🥅', relation:'Football Team', caption:'Add your caption for Parth here.', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/parth.mp4' },
+      { id:'parth',   name:'Parth',           emoji:'🥅', relation:'Football Team', caption:'Cuddle buddies 🤝', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/parth.mp4' },
       { id:'vrinda',  name:'Vrinda',          emoji:'🌟', relation:'Football Team', caption:'Ek dusre ko tane marte hai hum aur chhed krne mein mza ata hai but at the end kaafi supportive hai vo 🥲', videoSrc:'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/vrinda.mp4' },
     ]
   },
@@ -699,6 +700,29 @@ function revealMessi() {
   }
   // make the emoji colourful on reveal
   document.querySelector('.messi-surprise .messi-reveal').style.animation = 'fadeIn 0.4s ease';
+
+  // 🎉 Confetti!
+  const duration = 3000;
+  const end = Date.now() + duration;
+  const colors = ['#ffd700', '#ff6600', '#ffffff', '#4caf50', '#ff4444'];
+
+  (function frame() {
+    confetti({
+      particleCount: 6,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 },
+      colors: colors
+    });
+    confetti({
+      particleCount: 6,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 },
+      colors: colors
+    });
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
 }
 
 function closeModal() {
