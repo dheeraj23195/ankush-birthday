@@ -33,6 +33,7 @@
     align-items: center; justify-content: center;
     text-align: center; position: relative;
     overflow: hidden; padding: 40px 20px;
+    width: 100%;
   }
 
   .hero-pitch {
@@ -60,7 +61,13 @@
     pointer-events: none;
   }
 
-  .hero-content { position: relative; z-index: 2; }
+  .hero-content {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    width: 100%; max-width: 900px;
+    margin: 0 auto;
+  }
 
   .hero-tag {
     display: inline-flex; align-items: center; gap: 8px;
@@ -70,6 +77,16 @@
     border: 1px solid rgba(76,175,80,0.25);
     padding: 7px 18px; border-radius: 100px;
     background: rgba(76,175,80,0.06);
+    white-space: nowrap;
+  }
+
+  /* Name with image reveal behind it */
+  .hero-name-wrap {
+    position: relative;
+    display: block;
+    width: 100%;
+    cursor: none;
+    line-height: 1;
   }
 
   .hero-name {
@@ -79,7 +96,38 @@
     background: linear-gradient(160deg, #ffffff 0%, var(--gold) 45%, #c87000 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 0 60px rgba(240,192,64,0.2));
+    position: relative;
+    z-index: 2;
+    display: block;
+    text-align: center;
+  }
+
+  /* The image sits BEHIND the text, masked to the text shape */
+  .hero-name-bg {
+    position: absolute;
+    inset: -20px;
+    background-image: url('https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/ankush_bg.jpg');
+    background-size: cover;
+    background-position: center top;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+    border-radius: 12px;
+    filter: brightness(0.85) saturate(1.1);
+  }
+
+  .hero-name-wrap:hover .hero-name-bg { opacity: 1; }
+
+  /* On hover, make the text act as a mask revealing the image */
+  .hero-name-wrap:hover .hero-name {
+    background: none;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-image: url('https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/ankush_bg.jpg');
+    background-size: cover;
+    background-position: center top;
+    filter: none;
   }
 
   .hero-divider {
@@ -94,6 +142,7 @@
     letter-spacing: 14px;
     color: rgba(255,255,255,0.4);
     font-weight: 400;
+    text-align: center;
   }
 
   .hero-alive {
@@ -104,6 +153,7 @@
     border: 1px solid rgba(255,255,255,0.07);
     border-radius: 14px;
     backdrop-filter: blur(10px);
+    text-align: center;
   }
 
   .hero-alive-label {
@@ -122,7 +172,7 @@
   .hero-sub {
     margin-top: 22px; font-size: 13px; font-weight: 300;
     color: rgba(255,255,255,0.3); letter-spacing: 1px;
-    max-width: 320px; line-height: 1.7;
+    width: 100%; max-width: 320px; line-height: 1.7;
     text-align: center;
     margin-left: auto; margin-right: auto;
   }
@@ -136,6 +186,7 @@
     padding: 15px 40px; border-radius: 100px;
     cursor: pointer; border: none; transition: all 0.25s;
     box-shadow: 0 6px 30px rgba(240,192,64,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
+    white-space: nowrap;
   }
   .hero-btn:hover {
     transform: translateY(-3px);
@@ -144,60 +195,39 @@
   .hero-btn .arrow { transition: transform 0.2s; font-size: 16px; }
   .hero-btn:hover .arrow { transform: translateX(5px); }
 
-  /* ─── FOOTBALL CURSOR REVEAL ─── */
-  .hero-name-wrap {
-    position: relative;
-    display: inline-block;
-    cursor: none;
-  }
-
+  /* ─── FOOTBALL CURSOR ─── */
   .cursor-reveal {
     position: fixed;
-    width: 300px;
-    height: 300px;
+    width: 260px; height: 260px;
     pointer-events: none;
     z-index: 1000;
     opacity: 0;
     top: 0; left: 0;
     transform: translate(-50%, -50%);
     transition: opacity 0.4s ease;
-    will-change: transform;
+    will-change: left, top;
   }
-
   .cursor-reveal.visible { opacity: 1; }
-
-  .cursor-reveal svg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
-
+  .cursor-reveal svg { position: absolute; inset: 0; width: 100%; height: 100%; }
   .cursor-reveal .reveal-img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: center top;
     clip-path: url(#footballClip);
-    border-radius: 0;
   }
-
-  /* Custom cursor dot */
   .cursor-dot {
-    position: fixed;
-    width: 8px; height: 8px;
-    background: var(--gold);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 1001;
+    position: fixed; width: 8px; height: 8px;
+    background: var(--gold); border-radius: 50%;
+    pointer-events: none; z-index: 1001;
     transform: translate(-50%, -50%);
-    transition: opacity 0.3s;
-    opacity: 0;
+    transition: opacity 0.3s; opacity: 0;
     box-shadow: 0 0 8px rgba(240,192,64,0.8);
   }
   .cursor-dot.visible { opacity: 1; }
+
+  @media (max-width: 768px) {
+    .hero-tag { font-size: 8px; letter-spacing: 3px; padding: 6px 12px; }
+    .cursor-reveal { display: none; } /* hide on mobile — no cursor */
+  }
   .track-section {
     position: relative; padding: 0 0 120px; overflow: hidden;
   }
@@ -524,6 +554,7 @@
   <div class="hero-content">
     <div class="hero-tag">⚽ A journey through everyone who loves you</div>
     <div class="hero-name-wrap" id="heroNameWrap">
+      <div class="hero-name-bg"></div>
       <div class="hero-name">ANKUSH</div>
     </div>
     <div class="hero-divider"></div>
