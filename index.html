@@ -122,7 +122,9 @@
   .hero-sub {
     margin-top: 22px; font-size: 13px; font-weight: 300;
     color: rgba(255,255,255,0.3); letter-spacing: 1px;
-    max-width: 360px; line-height: 1.7;
+    max-width: 320px; line-height: 1.7;
+    text-align: center;
+    margin-left: auto; margin-right: auto;
   }
 
   .hero-btn {
@@ -142,7 +144,35 @@
   .hero-btn .arrow { transition: transform 0.2s; font-size: 16px; }
   .hero-btn:hover .arrow { transform: translateX(5px); }
 
-  /* ─── TRACK SECTION ─── */
+  /* Cursor reveal effect */
+  .hero-name-wrap {
+    position: relative;
+    display: inline-block;
+    cursor: none;
+  }
+
+  .cursor-reveal {
+    position: fixed;
+    width: 280px;
+    height: 340px;
+    border-radius: 50%;
+    background-image: url('https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/ankush_bg.jpg');
+    background-size: cover;
+    background-position: center top;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.85);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    border: 3px solid rgba(240,192,64,0.4);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(240,192,64,0.1);
+    will-change: transform;
+  }
+
+  .cursor-reveal.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
   .track-section {
     position: relative; padding: 0 0 120px; overflow: hidden;
   }
@@ -468,7 +498,9 @@
   <div class="hero-circle"></div>
   <div class="hero-content">
     <div class="hero-tag">⚽ A journey through everyone who loves you</div>
-    <div class="hero-name">ANKUSH</div>
+    <div class="hero-name-wrap" id="heroNameWrap">
+      <div class="hero-name">ANKUSH</div>
+    </div>
     <div class="hero-divider"></div>
     <div class="hero-21">TURNS 21</div>
     <div class="hero-alive">
@@ -481,6 +513,9 @@
     </button>
   </div>
 </section>
+
+<!-- Cursor reveal -->
+<div class="cursor-reveal" id="cursorReveal"></div>
 
 <!-- TRACK -->
 <section class="track-section" id="track">
@@ -828,6 +863,34 @@ function updateCounter() {
   document.getElementById('aliveCounter').textContent =
     `${days.toLocaleString()} days, ${hours}h ${minutes}m ${seconds}s`;
 }
+
+// Cursor reveal on ANKUSH text
+const cursorReveal = document.getElementById('cursorReveal');
+const heroNameWrap = document.getElementById('heroNameWrap');
+let mouseX = 0, mouseY = 0;
+let revealX = 0, revealY = 0;
+let isHovering = false;
+
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  if (isHovering) {
+    cursorReveal.style.left = mouseX + 'px';
+    cursorReveal.style.top = mouseY + 'px';
+  }
+});
+
+heroNameWrap.addEventListener('mouseenter', () => {
+  isHovering = true;
+  cursorReveal.classList.add('visible');
+  cursorReveal.style.left = mouseX + 'px';
+  cursorReveal.style.top = mouseY + 'px';
+});
+
+heroNameWrap.addEventListener('mouseleave', () => {
+  isHovering = false;
+  cursorReveal.classList.remove('visible');
+});
 
 updateCounter();
 setInterval(updateCounter, 1000);
