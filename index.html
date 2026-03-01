@@ -512,6 +512,9 @@
   </div>
 </section>
 
+<!-- Background Music -->
+<audio id="bgMusic" loop src="https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/happy-birthday-music-box(chosic.com).mp3"></audio>
+
 <!-- TRACK -->
 <section class="track-section" id="track">
   <div class="track-pitch-bg"></div>
@@ -730,6 +733,7 @@ function openModal(person, groupId) {
     document.getElementById('surpriseScreen').style.display = 'flex';
     document.getElementById('messiReveal').style.display = 'none';
     overlay.classList.add('active');
+    bgMusic.pause();
     return;
   }
 
@@ -765,9 +769,8 @@ function openModal(person, groupId) {
   }
 
   overlay.classList.add('active');
-}
-
-function revealMessi() {
+  bgMusic.pause();
+} {
   document.getElementById('surpriseScreen').style.display = 'none';
   const reveal = document.getElementById('messiReveal');
   reveal.style.display = 'block';
@@ -816,6 +819,7 @@ function closeModal() {
   if (v) v.pause();
   const mv = document.querySelector('#messiVideo video');
   if (mv) mv.pause();
+  if (musicStarted) bgMusic.play().catch(() => {});
   // reset for next open
   setTimeout(() => {
     document.getElementById('surpriseScreen').style.display = 'flex';
@@ -858,6 +862,21 @@ function updateCounter() {
   document.getElementById('aliveCounter').textContent =
     `${days.toLocaleString()} days, ${hours}h ${minutes}m ${seconds}s`;
 }
+
+// ─── BACKGROUND MUSIC ───
+const bgMusic = document.getElementById('bgMusic');
+bgMusic.volume = 1.0;
+
+// Autoplay on first interaction (browsers require a user gesture)
+let musicStarted = false;
+function startMusic() {
+  if (!musicStarted) {
+    bgMusic.play().catch(() => {});
+    musicStarted = true;
+  }
+}
+document.addEventListener('click', startMusic, { once: true });
+document.addEventListener('touchstart', startMusic, { once: true });
 
 updateCounter();
 setInterval(updateCounter, 1000);
