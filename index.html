@@ -75,7 +75,23 @@
     letter-spacing: 8px; color: var(--gold); margin-top: 6px;
   }
 
-  .hero-sub {
+  .hero-alive {
+    margin-top: 14px;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    font-weight: 300;
+  }
+
+  .alive-counter {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(22px, 5vw, 38px);
+    letter-spacing: 4px;
+    color: var(--gold);
+    margin-top: 4px;
+    filter: drop-shadow(0 0 12px rgba(240,192,64,0.4));
+  }
     margin-top: 20px; font-size: 15px; font-weight: 300;
     color: rgba(255,255,255,0.45); letter-spacing: 1px;
   }
@@ -420,6 +436,10 @@
     <div class="hero-tag">⚽ A journey through everyone who loves you</div>
     <div class="hero-name">ANKUSH</div>
     <div class="hero-21">TURNS 21</div>
+  <div class="hero-alive">
+    You have been alive for
+    <div class="alive-counter" id="aliveCounter">calculating...</div>
+  </div>
     <div class="hero-sub">Walk through the people in your life — they all showed up for you today.</div>
     <button class="hero-btn" onclick="document.getElementById('track').scrollIntoView({behavior:'smooth'})">
       Start the Journey <span class="arrow">→</span>
@@ -754,6 +774,27 @@ sc.addEventListener('mousedown', e=>{drag=true;sx=e.pageX-sc.offsetLeft;sl=sc.sc
 sc.addEventListener('mouseleave',()=>{drag=false;sc.classList.remove('grabbing');});
 sc.addEventListener('mouseup',()=>{drag=false;sc.classList.remove('grabbing');});
 sc.addEventListener('mousemove',e=>{if(!drag)return;e.preventDefault();sc.scrollLeft=sl-(e.pageX-sc.offsetLeft-sx);});
+
+// Live age counter — born 2nd March 2005, 7:46 AM IST
+// IST = UTC+5:30, so 7:46 AM IST = 2:16 AM UTC
+const birthDate = new Date(Date.UTC(2005, 2, 2, 2, 16, 0)); // month is 0-indexed
+
+function updateCounter() {
+  const now = new Date();
+  const diffMs = now - birthDate;
+
+  const totalSeconds = Math.floor(diffMs / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  document.getElementById('aliveCounter').textContent =
+    `${days.toLocaleString()} days, ${hours}h ${minutes}m ${seconds}s`;
+}
+
+updateCounter();
+setInterval(updateCounter, 1000);
 
 buildTrack();
 </script>
