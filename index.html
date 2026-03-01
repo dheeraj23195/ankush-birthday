@@ -512,6 +512,9 @@
   </div>
 </section>
 
+<!-- Background Music -->
+<audio id="bgMusic" loop src="https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/happy-birthday-music-box(chosic.com).mp3"></audio>
+
 <!-- TRACK -->
 <section class="track-section" id="track">
   <div class="track-pitch-bg"></div>
@@ -580,6 +583,18 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.browser.min.js"></script>
 <script>
+// ─── BACKGROUND MUSIC (declared first so all functions can access) ───
+const bgMusic = document.getElementById('bgMusic');
+bgMusic.volume = 1.0;
+let musicStarted = false;
+function startMusic() {
+  if (!musicStarted) {
+    bgMusic.play().catch(() => {});
+    musicStarted = true;
+  }
+}
+document.addEventListener('click', startMusic, { once: true });
+document.addEventListener('touchstart', startMusic, { once: true });
 const data = [
   {
     group: 'family', label: 'Family', pillClass: 'gpill-family', stemColor: '#bf360c',
@@ -730,6 +745,7 @@ function openModal(person, groupId) {
     document.getElementById('surpriseScreen').style.display = 'flex';
     document.getElementById('messiReveal').style.display = 'none';
     overlay.classList.add('active');
+    bgMusic.pause();
     return;
   }
 
@@ -750,7 +766,7 @@ function openModal(person, groupId) {
   const vid = document.getElementById('mVideo');
   if (person.videoSrc) {
     vid.className = 'modal-video landscape'; // default until loaded
-    vid.innerHTML = `<video controls autoplay playsinline src="${person.videoSrc}"></video>`;
+    vid.innerHTML = `<video controls autoplay playsinline preload="metadata" src="${person.videoSrc}"></video>`;
     const videoEl = vid.querySelector('video');
     videoEl.addEventListener('loadedmetadata', () => {
       if (videoEl.videoHeight > videoEl.videoWidth) {
@@ -765,9 +781,8 @@ function openModal(person, groupId) {
   }
 
   overlay.classList.add('active');
-}
-
-function revealMessi() {
+  bgMusic.pause();
+} {
   document.getElementById('surpriseScreen').style.display = 'none';
   const reveal = document.getElementById('messiReveal');
   reveal.style.display = 'block';
@@ -777,7 +792,7 @@ function revealMessi() {
   const messiVideoSrc = 'https://cxmryberpiyloisfbjgq.supabase.co/storage/v1/object/public/videos/messi.mp4';
   if (messiVideoSrc) {
     vid.className = 'modal-video landscape';
-    vid.innerHTML = `<video controls autoplay playsinline src="${messiVideoSrc}"></video>`;
+    vid.innerHTML = `<video controls autoplay playsinline preload="metadata" src="${messiVideoSrc}"></video>`;
     const videoEl = vid.querySelector('video');
     videoEl.addEventListener('loadedmetadata', () => {
       vid.className = videoEl.videoHeight > videoEl.videoWidth ? 'modal-video portrait' : 'modal-video landscape';
@@ -816,6 +831,7 @@ function closeModal() {
   if (v) v.pause();
   const mv = document.querySelector('#messiVideo video');
   if (mv) mv.pause();
+  if (musicStarted) bgMusic.play().catch(() => {});
   // reset for next open
   setTimeout(() => {
     document.getElementById('surpriseScreen').style.display = 'flex';
@@ -861,7 +877,6 @@ function updateCounter() {
 
 updateCounter();
 setInterval(updateCounter, 1000);
-
 buildTrack();
 </script>
 </body>
