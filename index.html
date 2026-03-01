@@ -583,6 +583,18 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.browser.min.js"></script>
 <script>
+// ─── BACKGROUND MUSIC (declared first so all functions can access) ───
+const bgMusic = document.getElementById('bgMusic');
+bgMusic.volume = 1.0;
+let musicStarted = false;
+function startMusic() {
+  if (!musicStarted) {
+    bgMusic.play().catch(() => {});
+    musicStarted = true;
+  }
+}
+document.addEventListener('click', startMusic, { once: true });
+document.addEventListener('touchstart', startMusic, { once: true });
 const data = [
   {
     group: 'family', label: 'Family', pillClass: 'gpill-family', stemColor: '#bf360c',
@@ -863,24 +875,8 @@ function updateCounter() {
     `${days.toLocaleString()} days, ${hours}h ${minutes}m ${seconds}s`;
 }
 
-// ─── BACKGROUND MUSIC ───
-const bgMusic = document.getElementById('bgMusic');
-bgMusic.volume = 1.0;
-
-// Autoplay on first interaction (browsers require a user gesture)
-let musicStarted = false;
-function startMusic() {
-  if (!musicStarted) {
-    bgMusic.play().catch(() => {});
-    musicStarted = true;
-  }
-}
-document.addEventListener('click', startMusic, { once: true });
-document.addEventListener('touchstart', startMusic, { once: true });
-
 updateCounter();
 setInterval(updateCounter, 1000);
-
 buildTrack();
 </script>
 </body>
